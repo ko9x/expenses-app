@@ -25,7 +25,7 @@ DUMMY_EXPENSES = [
     {
         id: 'e4',
         description: 'A book',
-        amount: 14.99,
+        amount: 24.99,
         date: new Date('2022-02-19')
     },
     {
