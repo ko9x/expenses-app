@@ -8,14 +8,12 @@ export default function RecentExpenses() {
 
     const recentExpenses = expenses.filter((expense) => {
         const today = new Date();
-        console.log('today', today); //@DEBUG
         const date7DaysAgo = getDateMinusDays(today, 7);
 
         return expense.date > date7DaysAgo;
     })
 
     useLayoutEffect(() => {
-        console.log('expenses', expenses ); //@DEBUG
     }, [expenses])
 
     return <ExpensesOutput expensesPeriod="Last 7 Days" expenses={recentExpenses}/>
