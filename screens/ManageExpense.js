@@ -1,10 +1,11 @@
 import { useLayoutEffect, useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TextInput } from "react-native";
 
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
 import CustomButton from "../components/UI/CustomButton";
 import { ExpensesContext } from "../store/expenses-context";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 export default function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
@@ -27,11 +28,17 @@ export default function ManageExpense({ route, navigation }) {
   }
 
   function confirmHandler() {
+    if (isEditing) {
+      updateExpense(editedExpenseId, {description: 'test edit', amount: 1.99, date: new Date()})
+    } else {
+      addExpense({description: 'test', amount: 9.99, date: new Date()});
+    }
     navigation.goBack();
   }
 
   return (
     <View style={styles.container}>
+      <ExpenseForm />
       <View style={styles.buttonContainer}>
         <CustomButton style={styles.button} mode={"flat"} onPress={cancelHandler}>
           Cancel
