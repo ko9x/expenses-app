@@ -6,7 +6,7 @@ import ManageExpense from "../../screens/ManageExpense";
 import { GlobalStyles } from "../../constants/styles";
 import { getFormattedDate } from "../../util/date";
 
-export default function ExpenseItem({ description, amount, date }) {
+export default function ExpenseItem({ description, amount, date, id }) {
   const navigation = useNavigation();
 
   function expensePressedHandler() {
