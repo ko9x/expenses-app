@@ -2,8 +2,18 @@ import axios from "axios";
 
 const baseUrl = "https://react-http-max-54195-default-rtdb.firebaseio.com";
 
-export function storeExpense(expenseDate) {
-  axios.post(`${baseUrl}/expenses.json`, expenseDate);
+export async function storeExpense(expenseData) {
+  const response = await axios.post(`${baseUrl}/expenses.json`, expenseData);
+
+  return response.data.name;
+}
+
+export function patchExpense(id, expenseData) {
+    axios.put(`${baseUrl}/expenses/${id}.json`, expenseData)
+};
+
+export function removeExpense(id) {
+    axios.delete(`${baseUrl}/expenses/${id}.json`)
 }
 
 export async function fetchExpenses() {
