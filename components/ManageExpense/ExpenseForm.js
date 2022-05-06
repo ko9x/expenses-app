@@ -44,8 +44,7 @@ export default function ExpenseForm({
     };
 
     const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
-    const datePattern = /^(19|20)\d{2}\-(0[1-9]|1[0-2])\-(0[1-9]|1\d|2\d|3[01])$/;
-    const dateIsValid = inputValues.date.value.match(datePattern);
+    const dateIsValid = !isNaN(new Date(inputValues.date.value));
     const descriptionIsValid = expenseData.description.trim().length > 0;
 
     if (amountIsValid && dateIsValid && descriptionIsValid) {
