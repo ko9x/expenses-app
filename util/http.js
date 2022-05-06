@@ -9,11 +9,11 @@ export async function storeExpense(expenseData) {
 }
 
 export function patchExpense(id, expenseData) {
-    axios.put(`${baseUrl}/expenses/${id}.json`, expenseData)
-};
+  return axios.put(`${baseUrl}/expenses/${id}.json`, expenseData);
+}
 
 export function removeExpense(id) {
-    axios.delete(`${baseUrl}/expenses/${id}.json`)
+  return axios.delete(`${baseUrl}/expenses/${id}.json`);
 }
 
 export async function fetchExpenses() {
