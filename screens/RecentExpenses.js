@@ -5,10 +5,12 @@ import { ExpensesContext } from "../store/expenses-context";
 import { getDateMinusDays } from "../util/date";
 import { fetchExpenses } from "../util/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 export default function RecentExpenses() {
-  const {expenses, setExpenses} = useContext(ExpensesContext);
+  const { expenses, setExpenses } = useContext(ExpensesContext);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState();
 
   const recentExpenses = expenses.filter((expense) => {
     const today = new Date();
@@ -17,19 +19,31 @@ export default function RecentExpenses() {
     return expense.date > date7DaysAgo;
   });
 
-  useEffect(() => {
-    async function handleFetchExpenses() {
-        let fetchedExpenses = await fetchExpenses();
-        setIsLoading(false);
-        setExpenses(fetchedExpenses);
+  async function handleFetchExpenses() {
+    try {
+      let fetchedExpenses = await fetchExpenses();
+      setExpenses(fetchedExpenses);
+    } catch (error) {
+      setError("Could not fetch expenses!");
     }
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
     handleFetchExpenses();
   }, []);
 
+  function errorHandler() {
+    setError(null);
+    handleFetchExpenses();
+  }
+
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error} onConfirm={errorHandler} buttonText="Try again?" />
+  }
+
   if (isLoading) {
-      return (
-        <LoadingOverlay />
-      )
+    return <LoadingOverlay />;
   }
 
   return (

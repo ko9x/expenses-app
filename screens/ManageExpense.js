@@ -7,11 +7,13 @@ import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { storeExpense, patchExpense, removeExpense } from "../util/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 export default function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
   const [isLoading, setIsloading] = useState(false);
+  const [error, setError] = useState();
   const { addExpense, updateExpense, deleteExpense, expenses } =
     useContext(ExpensesContext);
 
@@ -27,9 +29,14 @@ export default function ManageExpense({ route, navigation }) {
 
   async function deleteExpenseHandler() {
     setIsloading(true);
-    await removeExpense(editedExpenseId);
-    deleteExpense(editedExpenseId);
-    navigation.goBack();
+    try {
+      await removeExpense(editedExpenseId);
+      deleteExpense(editedExpenseId);
+      navigation.goBack();
+    } catch (error) {
+      setError('Could not delete expense!');
+      setIsloading(false);
+    }
   }
 
   function cancelHandler() {
@@ -39,16 +46,33 @@ export default function ManageExpense({ route, navigation }) {
   async function confirmHandler(expenseData) {
     setIsloading(true);
     if (isEditing) {
-      await patchExpense(editedExpenseId, expenseData);
-      updateExpense(editedExpenseId, expenseData);
+      try {
+        await patchExpense(editedExpenseId, expenseData);
+        updateExpense(editedExpenseId, expenseData);
+        navigation.goBack();
+      } catch (error) {
+        setError('Could not edit expense!');
+        setIsloading(false);
+      }
     } else {
-      const id = await storeExpense(expenseData);
+      try {
+        const id = await storeExpense(expenseData);
       addExpense({
         ...expenseData,
         id: id,
       });
+      navigation.goBack();
+      } catch (error) {
+        setError('Could not add expense!');
+        setIsloading(false);
+      }
     }
-    navigation.goBack();
+  }
+
+  if (error && !isLoading) {
+    return (
+      <ErrorOverlay message={error} onConfirm={cancelHandler} buttonText="Okay" />
+    )
   }
 
   if (isLoading) {
