@@ -19,6 +19,7 @@ export default function RecentExpenses() {
     return expense.date > date7DaysAgo;
   });
 
+  // Since RecentExpenses is the first component that loads make the api call to set the expenses state in the context here.
   async function handleFetchExpenses() {
     try {
       let fetchedExpenses = await fetchExpenses();

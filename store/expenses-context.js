@@ -27,6 +27,7 @@ function expensesReducer(state, action) {
       return state.filter((expense) => expense.id !== action.payload);
     case "SET":
       const reversedArray = action.payload.reverse();
+      // Reversing the expenses so the most recent are at the top
       return reversedArray;
     default:
       return state;

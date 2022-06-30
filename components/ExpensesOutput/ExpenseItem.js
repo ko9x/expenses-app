@@ -11,7 +11,7 @@ export default function ExpenseItem({ description, amount, date, id }) {
 
   function expensePressedHandler() {
     navigation.navigate("ManageExpense", {
-      expenseId: id
+      expenseId: id,
     });
   }
 
